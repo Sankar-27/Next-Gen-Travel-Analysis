@@ -1,6 +1,6 @@
 # TrendAtlas — Next-Gen Travel Intelligence Platform
 
-A dark-themed, AI-powered travel trends analytics SaaS platform that analyzes travel datasets and produces intelligent insights about emerging global tourism behaviors.
+AI-powered Next-Gen travel trends analytics platform that analyzes travel datasets and produces intelligent insights about emerging global tourism behaviors.
 
 ## Features
 
