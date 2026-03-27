@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TrendAtlas — Global Travel Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <link rel="stylesheet" href="src/styles.css" />
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <header class="topnav" id="topnav">
+    <div class="nav-brand">
+      <span class="brand-mark">◈</span>
+      <span class="brand-name">TrendAtlas</span>
+      <span class="brand-tag">Travel Intelligence</span>
+    </div>
+    <nav class="nav-tabs" id="navTabs">
+      <button class="nav-tab active" data-section="home">Overview</button>
+      <button class="nav-tab" data-section="eda">Analysis</button>
+      <button class="nav-tab" data-section="report">Business Report</button>
+    </nav>
+    <div class="nav-actions">
+      <label class="upload-pill" for="fileInput">
+        <span>⬆</span>
+        <span>Upload Datasets</span>
+        <input type="file" id="fileInput" accept=".csv" multiple hidden />
+      </label>
+      <div class="ai-beacon">
+        <span class="beacon-ring"></span>
+        <span class="beacon-dot"></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- DATASET CHIPS BAR -->
+  <div class="dataset-bar" id="datasetBar" style="display:none">
+    <span class="ds-label">Active datasets:</span>
+    <div class="ds-chips" id="dsChips"></div>
+    <button class="ds-clear" id="dsClear">✕ Clear all</button>
+  </div>
+
+  <!-- MAIN -->
+  <main class="main" id="mainContent">
+
+    <!-- HOME -->
+    <section id="section-home" class="section active">
+      <div class="hero">
+        <div class="hero-deco"></div>
+        <div class="hero-content">
+          <div class="hero-eyebrow">Next-Generation Travel Analytics Platform</div>
+          <h1 class="hero-title">Decode the Future<br><em>of Global Travel</em></h1>
+          <p class="hero-desc">Upload your travel datasets and TrendAtlas automatically detects emerging tourism trends, generates AI-powered intelligence, and produces an executive-grade strategic report.</p>
+          <div class="hero-upload" id="heroUpload">
+            <label class="hero-drop" id="heroDrop" for="heroFileInput">
+              <div class="hd-icon">◈</div>
+              <div class="hd-text">
+                <strong>Drop CSV files here — multiple datasets welcome</strong>
+                <span>Booking data · Search trends · Climate & destination indices</span>
+              </div>
+              <span class="hd-btn">Browse Files</span>
+              <input type="file" id="heroFileInput" accept=".csv" multiple hidden />
+            </label>
+          </div>
+          <div class="divider-line"><span>or try a sample dataset</span></div>
+          <div class="sample-row">
+            <button class="sample-card" data-sample="searchTrends">
+              <span class="sc-icon">🔍</span>
+              <span class="sc-name">Search Trends</span>
+              <span class="sc-sub">44 records · 2023–24</span>
+            </button>
+            <button class="sample-card" data-sample="climateDestination">
+              <span class="sc-icon">🌡️</span>
+              <span class="sc-name">Climate Index</span>
+              <span class="sc-sub">20 destinations</span>
+            </button>
+            <button class="sample-card" data-sample="bookingData">
+              <span class="sc-icon">📅</span>
+              <span class="sc-name">Booking Data</span>
+              <span class="sc-sub">35 records</span>
+            </button>
+            <button class="sample-card sample-card--all" data-sample="all3">
+              <span class="sc-icon">✦</span>
+              <span class="sc-name">All Three</span>
+              <span class="sc-sub">Combined analysis</span>
+            </button>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="orbit-wrap">
+            <div class="orbit o1"></div>
+            <div class="orbit o2"></div>
+            <div class="orbit o3"></div>
+            <div class="orbit-center">
+              <div class="oc-num">7</div>
+              <div class="oc-label">Trends</div>
+            </div>
+            <div class="orbit-node on1">❄️</div>
+            <div class="orbit-node on2">🎬</div>
+            <div class="orbit-node on3">🧘</div>
+            <div class="orbit-node on4">🌾</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- POST-LOAD OVERVIEW -->
+      <div id="overviewPanel" style="display:none">
+        <div class="panel-header">
+          <h2>Dataset Overview</h2>
+          <span class="loaded-badge">● LOADED</span>
+        </div>
+        <div id="statsRow" class="stats-grid-4"></div>
+        <div id="schemaGrid" class="schema-grid"></div>
+        <div id="cleaningLog" class="cleaning-log"></div>
+        <div id="dataPreview" class="data-preview"></div>
+      </div>
+    </section>
+
+    <!-- EDA -->
+    <section id="section-eda" class="section">
+      <div class="section-lead">
+        <div>
+          <h2>Exploratory Analysis</h2>
+          <p>Statistical patterns, seasonal demand, correlations and destination intelligence</p>
+        </div>
+      </div>
+      <div id="edaContent"><div class="empty-state"><span>◈</span><p>Upload a dataset to begin analysis</p></div></div>
+    </section>
+
+    <!-- BUSINESS REPORT -->
+    <section id="section-report" class="section">
+      <div class="section-lead">
+        <div>
+          <h2>Business Strategy Report</h2>
+          <p>Executive-level strategic intelligence for travel industry decision-makers</p>
+        </div>
+        <button class="btn-teal" id="exportBtn" style="display:none" onclick="window.print()">⬇ Export Report</button>
+      </div>
+      <div id="reportContent"><div class="empty-state"><span>◈</span><p>Upload a dataset to generate your business report</p></div></div>
+    </section>
+
+  </main>
+
+  <!-- LOADING OVERLAY -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loader-card">
+      <div class="loader-anim">
+        <div class="la-ring la-r1"></div>
+        <div class="la-ring la-r2"></div>
+        <div class="la-core">◈</div>
+      </div>
+      <div class="loader-title" id="loaderTitle">Analysing datasets…</div>
+      <div class="loader-step" id="loaderStep">Initialising pipeline</div>
+      <div class="loader-bar-wrap">
+        <div class="loader-bar-fill" id="loaderBar" style="width:0%"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="src/data/samples.js"></script>
+  <script src="src/utils/parser.js"></script>
+  <script src="src/utils/analyzer.js"></script>
+  <script src="src/utils/charts.js"></script>
+  <script src="src/utils/ai.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>
